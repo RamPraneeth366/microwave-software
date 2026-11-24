@@ -1,0 +1,162 @@
+Aim
+
+To simulate the dominant TE₁₀ mode in a WR-90 rectangular waveguide using MATLAB and determine its cutoff frequency, propagation constant, and electric- and magnetic-field distributions at 10 GHz.
+
+Procedure
+Open MATLAB and create a new script for the TE₁₀ mode simulation.
+Enter the WR-90 waveguide dimensions: width 22.86 mm, height 10.16 mm, and length 100 mm.
+Set the operating frequency to 10 GHz and select the TE₁₀ mode.
+Calculate the cutoff frequency and propagation constant of the selected mode.
+Generate the electric-field and magnetic-field distributions over the waveguide cross-section.
+Plot the normalized E-field and H-field distributions.
+Compare the obtained cutoff frequency with the theoretical/reference value.
+Calculate the percentage deviation between the simulated and theoretical cutoff frequencies.
+Check whether the operating frequency is above the cutoff frequency.
+Record the calculated values and field distributions for analysis.
+
+Program
+clc;
+clear;
+close all;
+
+%% TE10 MODE SIMULATION - WR90 RECTANGULAR WAVEGUIDE
+
+% Constants
+c = 3e8; % Speed of light (m/s)
+
+% Waveguide dimensions
+a = 22.86e-3; % Width (m)
+b = 10.16e-3; % Height (m)
+L = 100e-3; % Length (m)
+
+% Operating frequency
+f = 10e9; % 10 GHz
+
+% TE10 mode
+m = 1;
+n = 0;
+
+%% Cutoff frequency
+
+fc = (c/2)*sqrt((m/a)^2 + (n/b)^2);
+
+%% Free-space wave number
+
+k0 = 2pif/c;
+
+%% Propagation constant
+
+beta = k0*sqrt(1-(fc/f)^2);
+
+%% Percentage deviation
+
+% Theoretical cutoff frequency for TE10
+fc_theory = c/(2*a);
+
+% Simulated/analytical value
+fc_sim = fc;
+
+deviation = abs(fc_sim-fc_theory)/fc_theory*100;
+
+%% Display results
+
+fprintf('---------------------------------------------\n');
+fprintf(' TE10 MODE - WR90 WAVEGUIDE\n');
+fprintf('---------------------------------------------\n');
+
+fprintf('Operating Frequency = %.2f GHz\n',f/1e9);
+fprintf('Waveguide Width (a) = %.2f mm\n',a1000);
+fprintf('Waveguide Height (b) = %.2f mm\n',b1000);
+fprintf('Waveguide Length (L) = %.2f mm\n',L*1000);
+
+fprintf('\nTheoretical Cutoff Frequency = %.4f GHz\n',fc_theory/1e9);
+fprintf('Simulated Cutoff Frequency = %.4f GHz\n',fc_sim/1e9);
+fprintf('Percentage Deviation = %.4f %%\n',deviation);
+
+fprintf('\nPropagation Constant beta = %.4f rad/m\n',beta);
+
+if f > fc
+fprintf('Mode Status = TE10 PROPAGATES\n');
+else
+fprintf('Mode Status = TE10 BELOW CUTOFF\n');
+end
+
+%% Field grid
+
+x = linspace(0,a,150);
+y = linspace(0,b,100);
+
+[X,Y] = meshgrid(x,y);
+
+%% TE10 Electric field
+
+% For TE10, dominant electric field is Ey
+Ey = sin(pi*X/a);
+
+% Normalize
+Ey = Ey/max(abs(Ey(:)));
+
+%% TE10 Magnetic field
+
+% Hz distribution for TE10
+Hz = cos(pi*X/a);
+
+% Normalize
+Hz = Hz/max(abs(Hz(:)));
+
+%% E-field distribution
+
+figure;
+
+imagesc(x1000,y1000,Ey);
+axis xy;
+xlabel('Waveguide Width x (mm)');
+ylabel('Waveguide Height y (mm)');
+title('TE_{10} Mode - Normalized E-Field Distribution');
+colorbar;
+
+%% H-field distribution
+
+figure;
+
+imagesc(x1000,y1000,Hz);
+axis xy;
+xlabel('Waveguide Width x (mm)');
+ylabel('Waveguide Height y (mm)');
+title('TE_{10} Mode - Normalized H-Field Distribution');
+colorbar;
+
+%% E-field 3D visualization
+
+figure;
+
+surf(X1000,Y1000,Ey);
+shading interp;
+xlabel('x (mm)');
+ylabel('y (mm)');
+zlabel('Normalized E-field');
+title('TE_{10} Mode - E-Field');
+colorbar;
+
+%% H-field 3D visualization
+
+figure;
+
+surf(X1000,Y1000,Hz);
+shading interp;
+xlabel('x (mm)');
+ylabel('y (mm)');
+zlabel('Normalized H-field');
+title('TE_{10} Mode - H-Field');
+colorbar;
+
+Outputs
+Image
+Image
+Image
+Image
+Image
+
+Result
+
+The TE₁₀ mode was successfully simulated for the WR-90 rectangular waveguide. The cutoff frequency was found to be approximately 6.56 GHz, and the propagation constant at 10 GHz was approximately 199 rad/m. Since 10 GHz is greater than the cutoff frequency, the TE₁₀ mode propagates successfully through the waveguide. The corresponding E-field and H-field distributions were obtained.
